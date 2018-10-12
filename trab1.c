@@ -7,43 +7,43 @@ typedef struct num {
 }nums;
 
 typedef struct arqs {
-	arq * nums[];
+	nums * nums[200];
 	int top;
 }arq;
 
-arq.top = 0;
-
-num * newNum (int num) {
-	num * n = (num *) malloc (sizeof(num));
+nums * newNum (int num) {
+	nums * n = (nums *) malloc (sizeof(nums));
 	n->nums = num;
 	return n;
 } 
 
-void Saida (string argv[], arq * a)  {
-	FILE * arq;
-	arq = fopen(argv[argc-1],"w");
-	fprintf (arq, "%d", a->top);
-	for (int i=0; i<a->top; i++) {
-		fprintf(arq, "%d"; a->nums[i]);
+void Saida (char * argv[], int argc, arq * a)  {
+	FILE * fp;
+	fp = fopen(argv[argc-1],"w");
+	fprintf (fp, "%d", a->top);
+	int i;
+	for (i=0; i<a->top; i++) {
+		fprintf(fp, "%d", a->nums[i]);
 	}
-	fclose(arq);
+	fclose(fp);
 }
 
-void leArq (int argc, string argv[]) {
-	FILE * arq;
-	int num[];
-	for (int i=2; i<(argc-2); i++) {
-		arq = fopen("argv[i]", "r");
-		arqs  * arq = (arqs *) malloc(sizeof(arqs));
-		fscanf  (argv[i], "%d", &arq->top);
-		for (int x=0; x<arq->top; x++) {
+void leArq (int argc, char argv[]) {
+	FILE * fp;
+	int num[200];
+	int i, x;
+	for (i=2; i<(argc-2); i++) {
+		fp = fopen("argv[i]", "r");
+		arq  * a = (arq *) malloc(sizeof(arq));
+		fscanf  (argv[i], "%d", &a->top);
+		for (x=0; x<a->top; x++) {
 			fscanf (argv[i], "%d", &num);
-			arq->nums = newNum(num);
+			a->nums[x] = newNum(num);
 		}
 	}
-	fclose(arq);
+	fclose(fp);
 }
 
-int main (int argc, string * argv[]) {
+int main (int argc, char * argv[]) {
 	
 }
