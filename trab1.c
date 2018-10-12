@@ -7,7 +7,7 @@ typedef struct num {
 }nums;
 
 typedef struct arqs {
-	arq * nums[];
+	num* nums[2000000];
 	int top;
 }arq;
 
@@ -17,7 +17,7 @@ num * newNum (int num) {
 	num * n = (num *) malloc (sizeof(num));
 	n->nums = num;
 	return n;
-} 
+}
 
 void Saida (string argv[], arq * a)  {
 	FILE * arq;
@@ -45,5 +45,5 @@ void leArq (int argc, string argv[]) {
 }
 
 int main (int argc, string * argv[]) {
-	
+
 }
