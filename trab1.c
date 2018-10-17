@@ -28,18 +28,19 @@ void Saida (char * argv[], int argc, arq * a)  {
 	fclose(fp);
 }
 
-void leArq (int argc, char argv[]) {
+void leArq (int argc, char *  argv[]) {
 	FILE * fp;
 	int num[200];
 	int i, x;
-	for (i=2; i<(argc-2); i++) {
-		fp = fopen("argv[i]", "r");
+	for (i=1; i<(argc-2); i++) {
+		fp = fopen(argv[i], "r");
 		arq  * a = (arq *) malloc(sizeof(arq));
-		fscanf  (argv[i], "%d", &a->top);
+		fscanf  (fp, "%d", &a->top);
 		for (x=0; x<a->top; x++) {
-			fscanf (argv[i], "%d", &num);
-			a->nums[x] = newNum(num);
+			fscanf (fp, "%d", &num);
+			a->nums[x] = newNum(num[x]);
 		}
+                free(arq);
 	}
 	fclose(fp);
 }
