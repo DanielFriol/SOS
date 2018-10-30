@@ -40,7 +40,7 @@ void leArq (int argc, char *  argv[]) {
 			fscanf (fp, "%d", &num);
 			a->nums[x] = newNum(num[x]);
 		}
-                free(arq);
+                free(a);
 	}
 	fclose(fp);
 }
