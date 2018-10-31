@@ -2,6 +2,26 @@
 #include <stdlib.h>
 #define TAMANHOMAX 100
 
+void quick_sort (int *a, int n) {
+    int i, j, p, t;
+    if (n < 2)
+        return;
+    p = a[n / 2];
+    for (i = 0, j = n - 1;; i++, j--) {
+        while (a[i] < p)
+            i++;
+        while (p < a[j])
+            j--;
+        if (i >= j)
+            break;
+        t = a[i];
+        a[i] = a[j];
+        a[j] = t;
+    }
+    quick_sort(a, i);
+    quick_sort(a + i, n - i);
+}
+
 int main(int argc, char *argv[]){
     FILE * fp,*fo;
     int *n;
@@ -20,8 +40,6 @@ int main(int argc, char *argv[]){
     for(;y<=argc-2;y++){
         fp = fopen(argv[y],"r");
 
-        n= realloc(n,(x+1)*sizeof(int));
-
         for(;!feof(fp);x++){
         //while(!feof(fp)){
             if(x<TAMANHOMAX*tv){
@@ -38,15 +56,19 @@ int main(int argc, char *argv[]){
 
     }
    //}
-
+    n= realloc(n,(x+1)*sizeof(int));
 
     nvt=x-1;
-    printf("Tamanho vetor: %d\n",nvt);
-   // fo=fopen(argv[argc-1],"w");
-    //for(y=0;y<nvt;y++){
-     //   fprintf(fo,"%d\n",n[y]);
 
-    //}
+    quick_sort(n, nvt);
+
+    printf("Tamanho vetor: %d\n",nvt);
+   fo=fopen(argv[argc-1],"w");
+    for(y=0;y<nvt;y++){
+
+        fprintf(fo,"%d\n",n[y]);
+
+    }
 
     free(n);
 
