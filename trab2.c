@@ -1,31 +1,47 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <pthread.h>
 #define TAMANHOMAX 100
 
-void quick_sort (int *a, int n) {
+int nt=0;
+int count=0;
+pthread_t id;
+
+typedef struct dados {
+    int a;
+    int n;
+}d;
+
+void quick_sort (void * v) {
     int i, j, p, t;
-    if (n < 2)
+    if (v->n < 2)
         return;
-    p = a[n / 2];
-    for (i = 0, j = n - 1;; i++, j--) {
-        while (a[i] < p)
+    p = v->a[d.tam / 2];
+    for (i = 0, j = v->n - 1;; i++, j--) {
+        while (v->a[i] < p)
             i++;
-        while (p < a[j])
+        while (p < v->a[j])
             j--;
         if (i >= j)
             break;
-        t = a[i];
-        a[i] = a[j];
-        a[j] = t;
+        t = v->a[i];
+        v->a[i] = v->a[j];
+        v->a[j] = t;
     }
-    quick_sort(a, i);
-    quick_sort(a + i, n - i);
+    if (count<nt) {
+        pthread_create(&id, NULL, quick_sort, (void*)d);
+        count++;
+    }
+    else {
+        quick_sort(v->a, i);
+        quick_sort(v->a + i, n - i);
+    }
+
 }
 
 int main(int argc, char *argv[]){
     FILE * fp,*fo;
     int *n;
-    int nt=0;
     int nvt=0;
     int tv=1;
     register int x=0,y=2;
@@ -60,7 +76,9 @@ int main(int argc, char *argv[]){
 
     nvt=x-1;
 
-    quick_sort(n, nvt);
+    d.n = n;
+    d.tam=nvt;
+    quick_sort((void *)d);
 
     printf("Tamanho vetor: %d\n",nvt);
    fo=fopen(argv[argc-1],"w");
