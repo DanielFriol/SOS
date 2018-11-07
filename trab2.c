@@ -15,8 +15,6 @@ void quick_sort (int *a, int n);
 
 int main(int argc, char *argv[]){
     FILE * fp,*fo;
-
-
     int tv=1;
     register int x=0,y=2;
 
@@ -34,16 +32,12 @@ int main(int argc, char *argv[]){
         //while(!feof(fp)){
             if(x<TAMANHOMAX*tv){
                 fscanf(fp,"%d",&n[x]);
-
             }else{
                 tv++;
                 n=realloc(n,TAMANHOMAX*tv*sizeof(int));
                 fscanf(fp,"%d",&n[x]);
-
             }
-
         }
-
     }
    //}
     n= realloc(n,(x+1)*sizeof(int));
@@ -63,7 +57,6 @@ int main(int argc, char *argv[]){
     free(n);
 
     return 0;
-
 }
 
 void *chama (void *v) {
