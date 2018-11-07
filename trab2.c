@@ -5,6 +5,8 @@
 
 int nt=0;
 int count=0;
+int nvt=0;
+int *n;
 pthread_t id;
 
 typedef struct dados {
@@ -12,37 +14,43 @@ typedef struct dados {
     int n;
 }d;
 
-void quick_sort (void * v) {
+void *chama (void *v);
+
+void quick_sort (int *a, int n) {
     int i, j, p, t;
-    if (v->n < 2)
+    if (n < 2)
         return;
-    p = v->a[d.tam / 2];
-    for (i = 0, j = v->n - 1;; i++, j--) {
-        while (v->a[i] < p)
+    p = a[n / 2];
+    for (i = 0, j = n - 1;; i++, j--) {
+        while (a[i] < p)
             i++;
-        while (p < v->a[j])
+        while (p < a[j])
             j--;
         if (i >= j)
             break;
-        t = v->a[i];
-        v->a[i] = v->a[j];
-        v->a[j] = t;
+        t = a[i];
+        a[i] = a[j];
+        a[j] = t;
     }
     if (count<nt) {
-        pthread_create(&id, NULL, quick_sort, (void*)d);
+        pthread_create(&id, NULL, chama, NULL);
         count++;
     }
     else {
-        quick_sort(v->a, i);
-        quick_sort(v->a + i, n - i);
+        quick_sort(a, i);
+        quick_sort(a + i, n - i);
     }
 
 }
 
+void *chama (void *v) {
+    quick_sort(n, nvt);
+}
+
 int main(int argc, char *argv[]){
     FILE * fp,*fo;
-    int *n;
-    int nvt=0;
+
+
     int tv=1;
     register int x=0,y=2;
 
@@ -76,9 +84,7 @@ int main(int argc, char *argv[]){
 
     nvt=x-1;
 
-    d.n = n;
-    d.tam=nvt;
-    quick_sort((void *)d);
+    chama(NULL);
 
     printf("Tamanho vetor: %d\n",nvt);
    fo=fopen(argv[argc-1],"w");
