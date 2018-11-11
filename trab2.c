@@ -5,58 +5,58 @@
 #define TAMANHOMAX 100
 
 typedef struct valores{
-    int * vet;
     int i;
     int f;
 
 }v;
 void * chama(v * stc){
-    printf("entrou");
-    quick_sort(stc->vet,stc->i,stc->f);
+    printf("entrou\n");
+    quick_sort(stc->i,stc->f);
 
 
 }
+int *n;
 
 
-
-void  quick_sort(int *a, int left, int right) {
+void  quick_sort(int left, int right) {
     int i, j, x, y;
 
     i = left;
     j = right;
-    x = a[(left + right) / 2];
+    x = n[(left + right) / 2];
 
     while(i <= j) {
-        while(a[i] < x && i < right) {
+        while(n[i] < x && i < right) {
             i++;
         }
-        while(a[j] > x && j > left) {
+        while(n[j] > x && j > left) {
             j--;
         }
         if(i <= j) {
-            y = a[i];
-            a[i] = a[j];
-            a[j] = y;
+            y = n[i];
+            n[i] = n[j];
+            n[j] = y;
             i++;
             j--;
         }
     }
 
     if(j > left) {
-        quick_sort(a, left, j);
+        quick_sort(left, j);
     }
     if(i < right) {
-        quick_sort(a, i, right);
+        quick_sort(i, right);
     }
 
 }
 
 int main(int argc, char *argv[]) {
   //contador, vetor;
-  int count=0, *n, tv=1,nt=0,nvt,aux=0;
+  int count=0, tv=1,nt=0,nvt,aux=0;
   FILE * fp,*fo;
   register int x=0,y=2;
-
+    nt= atoi(argv[1]);
+    v* v= malloc(nt*sizeof(v));
 
   //parâmetros errados
   if (argc<2) {
@@ -65,7 +65,7 @@ int main(int argc, char *argv[]) {
   }
 
   //atribuição do numero de threads
-  nt= atoi(argv[1]);
+
 
   //leitura dos arquivos de entrada
   n= calloc(TAMANHOMAX,sizeof(int));
@@ -84,15 +84,11 @@ int main(int argc, char *argv[]) {
   n= realloc(n,(x+1)*sizeof(int));
 
   nvt=x-1;
-   v * staux;
-   staux = (v *) malloc (sizeof(v));
 
   //criação dos id's das threads
-  pthread_t id[8];
-    v v[nt];
+  pthread_t id[nt];
     int cont=0;
         if(nt==1){
-        v[0].vet=n;
         v[0].i=0;
         v[0].f=nvt-1;
         printf("%d %d\n",v[0].i,v[0].f);
@@ -107,13 +103,11 @@ int main(int argc, char *argv[]) {
 
         for(;cont<nt;cont++){
             if(cont==nt-1){
-                v[cont].vet= n;
                 v[cont].i = ((v[cont-1].f)+1);
                 v[cont].f = nvt-1;
                 printf("%d %d %d\n",v[cont].i,v[cont].f,cont);
 
-            }else{
-            v[cont].vet= n;
+            }else
             v[cont].i= ((v[cont-1].f)+1);
             v[cont].f= ((v[cont].i)+(nvtd));
             printf("%d %d %d\n",v[cont].i,v[cont].f,cont);
@@ -121,35 +115,30 @@ int main(int argc, char *argv[]) {
 
             }
         }
-    }
-
-    //for(int cont=0;cont<nt;cont++){
-     //quick_sort(v[cont].vet,v[cont].i,v[cont].f);
-
-    //}
 
 
 
 
+
+/*
     for(int cont=0;cont<nt;cont++){
     printf("%d %d\n",nt,cont);
        pthread_create(&id[cont], NULL, chama , &v[cont]);
         }
 
-/*
+*/
 
-    //quick_sort(v[0].vet,v[0].i,v[0].f);
     int rc;
     for(int cont=0;cont<nt;cont++){
         if ((rc = pthread_create(&id[cont], NULL, chama , &v[cont]))) {
-        printf("entrou");
+        printf("entrou2");
       fprintf(stderr, "error: pthread_create, rc: %d\n", rc);
       return EXIT_FAILURE;
         }
     }
 
     //}
-*/
+
 
     for (int cont = 0; cont < nt; ++cont) {
     pthread_join(id[cont], NULL);
@@ -165,7 +154,7 @@ int main(int argc, char *argv[]) {
   for (y=0; y<nvt; y++) {
     fprintf(fo, "%d\n", n[y]);
   }
-  free(n);
+
 
 
 
