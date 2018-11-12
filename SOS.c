@@ -9,18 +9,46 @@
 typedef struct valores{
     int i;
     int f;
-
 }v;
 
-//função que recebe uma struct, que será passada para o pthread_creat e chamar o sort
-void * chama(v * stc){
-    quick_sort(stc->i,stc->f);
+int *n;
+//quicksort para usar com as threads
+void  quick_sort(int left, int right) {
+    int i, j, x, y;
 
+    i = left;
+    j = right;
+    x = n[(left + right) / 2];
+
+    while(i <= j) {
+        while(n[i] < x && i < right) {
+            i++;
+        }
+        while(n[j] > x && j > left) {
+            j--;
+        }
+        if(i <= j) {
+            y = n[i];
+            n[i] = n[j];
+            n[j] = y;
+            i++;
+            j--;
+        }
+    }
+
+    if(j > left) {
+        quick_sort(left, j);
+    }
+    if(i < right) {
+        quick_sort(i, right);
+    }
 
 }
-int *n;
 
-
+//função que recebe uma struct, que será passada para o pthread_creat e chamar o sort
+void *chama(v * stc){
+    quick_sort(stc->i,stc->f);
+}
 
 //mergesorte para ordenar os blocos no final
 void merge(int arr[], int l, int m, int r)
@@ -93,41 +121,6 @@ void mergeSort(int arr[], int l, int r)
     }
 }
 
-
-
-//quicksort para usar com as threads
-void  quick_sort(int left, int right) {
-    int i, j, x, y;
-
-    i = left;
-    j = right;
-    x = n[(left + right) / 2];
-
-    while(i <= j) {
-        while(n[i] < x && i < right) {
-            i++;
-        }
-        while(n[j] > x && j > left) {
-            j--;
-        }
-        if(i <= j) {
-            y = n[i];
-            n[i] = n[j];
-            n[j] = y;
-            i++;
-            j--;
-        }
-    }
-
-    if(j > left) {
-        quick_sort(left, j);
-    }
-    if(i < right) {
-        quick_sort(i, right);
-    }
-
-}
-
 int main(int argc, char *argv[]) {
     //atribuição de variáveis
     int count=0, tv=1,nt=0,nvt,aux=0;
@@ -150,9 +143,6 @@ int main(int argc, char *argv[]) {
         printf("Inválido!!! Use o comando assim: %s numerodethreads arquivoentrada1 ... arquivosaida\n",argv[0]);
         exit(0);
   }
-
-
-
 
   //leitura dos arquivos de entrada
   n= calloc(TAMANHOMAX,sizeof(int));
@@ -198,24 +188,20 @@ int main(int argc, char *argv[]) {
             }
         }
 
-
-
-
-
-
     //criando as threads
     int rc;
-    for(int cont=0;cont<nt;cont++){
-        if ((rc = pthread_create(&id[cont], NULL, chama , &v[cont]))) {
+    int cont2=0;
+    for(cont2=0;cont2<nt;cont2++){
+        if ((rc = pthread_create(&id[cont2], NULL, chama , &v[cont2]))) {
       fprintf(stderr, "error: pthread_create, rc: %d\n", rc);
       return EXIT_FAILURE;
         }
     }
 
-
     //join das threads
-    for (int cont = 0; cont < nt; ++cont) {
-    pthread_join(id[cont], NULL);
+    int cont1 = 0;
+    for (cont1 = 0; cont1 < nt; ++cont1) {
+    pthread_join(id[cont1], NULL);
   }
 
 
@@ -245,9 +231,9 @@ int main(int argc, char *argv[]) {
     //fechando o arquivo
         fclose(fo);
 
-   printf("--------------------------------------------------------------------\n");
-  printf("|                  Arquivo gerado com sucesso!!!                     |\n");
-   printf("--------------------------------------------------------------------\n");
+   printf("---------------------------------------------------------\n");
+   printf(" Arquivo '%s' gerado com sucesso!!!                      \n", argv[argc-1]);
+   printf("---------------------------------------------------------\n");
 
   return 0;
 }
