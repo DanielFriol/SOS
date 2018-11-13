@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <pthread.h>
 #include <math.h>
+#include <time.h>
 #define TAMANHOMAX 100
 
 
@@ -187,6 +188,7 @@ int main(int argc, char *argv[]) {
 
             }
         }
+     clock_t begin = clock();
 
     //criando as threads
     int rc;
@@ -204,7 +206,6 @@ int main(int argc, char *argv[]) {
     pthread_join(id[cont1], NULL);
   }
 
-
    //mergesort para ordenar os blocos
    if(nt==2){
         merge(n,v[0].i,v[1].i,v[1].f);
@@ -214,7 +215,8 @@ int main(int argc, char *argv[]) {
    }else{
         mergeSort(n,0,nvt-1);
     }
-
+    clock_t end = clock();
+   double time_spent = (double)(end-begin)/ CLOCKS_PER_SEC;
   //abertura do arquivo de saída
   fo=fopen(argv[argc-1],"w");
 
@@ -230,7 +232,7 @@ int main(int argc, char *argv[]) {
 
     //fechando o arquivo
         fclose(fo);
-
+    printf("tempo das threads -> %f\n\n",time_spent);
    printf("---------------------------------------------------------\n");
    printf(" Arquivo '%s' gerado com sucesso!!!                      \n", argv[argc-1]);
    printf("---------------------------------------------------------\n");
